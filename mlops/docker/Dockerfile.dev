@@ -1,0 +1,14 @@
+# 🧠 Dockerfile.dev — Development Environment
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY . .
+
+RUN apt-get update && apt-get install -y git curl && \
+    pip install --upgrade pip && \
+    pip install -r requirements.txt || true && \
+    pip install jupyter black flake8 mlflow qdrant-client
+
+EXPOSE 8888 5000 6333
+
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--allow-root", "--NotebookApp.token=''"]

@@ -1,0 +1,48 @@
+# ---------------------------------------------------------
+# 🚀 GitLab CI/CD pipeline for AI/ML Snippets
+# Stages: lint → test → build → deploy
+# ---------------------------------------------------------
+
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PYTHONUNBUFFERED: "1"
+
+before_script:
+  - python3 -m venv venv
+  - source venv/bin/activate
+  - pip install --upgrade pip
+  - pip install -r requirements.txt || true
+
+lint:
+  stage: lint
+  script:
+    - pip install black flake8 isort
+    - black --check .
+    - flake8 .
+    - isort . --check-only
+  allow_failure: false
+
+test:
+  stage: test
+  script:
+    - pip install pytest pytest-cov
+    - pytest --maxfail=1 --disable-warnings -q
+  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
+
+build:
+  stage: build
+  script:
+    - docker build -f mlops/docker/Dockerfile.dev -t ai-ml-snippets-dev .
+    - echo "✅ Build completed"
+
+deploy:
+  stage: deploy
+  script:
+    - echo "🚀 Deploying application..."
+  when: manual

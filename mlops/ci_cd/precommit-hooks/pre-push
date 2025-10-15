@@ -1,0 +1,10 @@
+#!/bin/bash
+# 🚀 Pre-push hook — run tests before pushing to remote
+echo "Running tests before push..."
+pytest --maxfail=1 --disable-warnings -q
+if [ $? -ne 0 ]; then
+    echo "❌ Tests failed! Push aborted."
+    exit 1
+else
+    echo "✅ All tests passed. Proceeding with push..."
+fi
