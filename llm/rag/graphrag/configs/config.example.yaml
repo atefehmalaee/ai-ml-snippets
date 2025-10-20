@@ -1,0 +1,36 @@
+# Copy to config.yaml and edit
+neo4j:
+uri: "bolt://localhost:7687"
+user: "neo4j"
+password: "password"
+database: "neo4j"
+
+
+embedding:
+provider: "ollama" # openai | azure | ollama
+model: "nomic-embed-text"
+dimension: 768
+
+
+llm:
+provider: "ollama" # openai | azure | ollama
+model: "llama3:8b"
+
+
+chunking:
+size: 800
+overlap: 120
+
+
+paths:
+corpus_dir: "data/corpus"
+output_dir: "data/outputs"
+
+
+retrieval:
+top_k: 12
+expand_hops: 2
+
+
+prompts:
+answer_template: "default"
